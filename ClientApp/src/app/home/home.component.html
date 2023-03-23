@@ -1,0 +1,66 @@
+<h5>Add Item</h5>
+<div class="row">
+  <div class="col-3 md:col-4">
+    <input type="text" placeholder="Enter Item Name" pInputText class="form-control" [(ngModel)]="addedItem.name" />
+  </div>
+  <div class="col-3 md:col-4">
+    <input type="number" placeholder="Enter Value" pInputText class="form-control" min="0" [(ngModel)]="addedItem.value" />
+  </div>
+  <div class="col-3 md:col-4">
+    <p-dropdown [options]="categories" [(ngModel)]="addedItem.category" optionLabel="name" [style]="{'display': 'flex'}"></p-dropdown>
+  </div>
+  <div class="col-3 md:col-4">
+    <button pButton type="button" class="form-control" icon="pi pi-plus" title="Add" (click)="addItem($event)"></button>
+  </div>
+</div>
+<br />
+<br />
+<h5>View Item</h5>
+<p-table [value]="items" sortField="category.name" sortMode="single" [scrollable]="true"
+         scrollHeight="400px" rowGroupMode="subheader" groupRowsBy="category.name">
+  <ng-template pTemplate="header">
+    <tr>
+      <th style="min-width:200px">Name</th>
+      <th style="min-width:200px">Value</th>
+      <th style="min-width:200px">Action</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="groupheader" let-item>
+    <tr pRowGroupHeader>
+      <td colspan="3">
+        <h5 class="p-text-bold p-ml-2">{{item.category.name}}</h5>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="groupfooter" let-item>
+    <tr class="p-rowgroup-footer">
+      <td style="min-width: 80%">
+        <div style="text-align: right; width: 100%">Total {{ item.category.name }}</div>
+      </td>
+      <td style="width: 20%">${{calculateCategoryItemsTotal(item.category.id)}}</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+    <tr>
+      <td style="min-width:200px">
+        {{item.name}}
+      </td>
+      <td style="min-width:200px">
+        <span class="image-text">${{item.value}}</span>
+      </td>
+      <td style="min-width:200px">
+        <button pButton type="button" icon="pi pi-trash" title="Delete" (click)="deleteItem($event, item.id)"></button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <tr>
+      <td style="min-width: 80%">
+        <div style="text-align: right; width: 100%">Total</div>
+      </td>
+      <td style="width: 20%">${{calculateTotalItems()}}</td>
+    </tr>
+  </ng-template>
+</p-table>
+<p-confirmPopup></p-confirmPopup>
+<p-toast></p-toast>
